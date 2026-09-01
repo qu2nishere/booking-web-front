@@ -4,14 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản trị khách sạn</title>
+    <title>Khách sạn Mây Vàng - Trải nghiệm kỳ nghỉ đẳng cấp</title>
     <link rel="stylesheet" href="css/Index.css">
     <link rel="stylesheet" href="css/Global.css">
+    <link rel="stylesheet" href="css/Header.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <div id="header-placeholder"></div>
+    <script src="js/SharedHeader.js"></script>
 
     <section class="hero-section">
         <div class="hero-overlay"></div>
@@ -31,23 +33,31 @@
         </div>
     </section>
 
+    <section class="reviews-section" style="padding: 80px 20px; background: #fffcf8 url('data:image/svg+xml,%3Csvg width=%2760%27 height=%2760%27 viewBox=%270 0 60 60%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg fill=%27none%27 fill-rule=%27evenodd%27%3E%3Cg fill=%27%23d4a017%27 fill-opacity=%270.05%27%3E%3Cpath d=%27M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%27/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); position: relative;">
+        <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
+            <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.5rem; color: #1e293b;">Khách hàng nói gì về chúng tôi</h2>
+            
+            <div id="averageRatingContainer" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; display: none;">
+                <!-- Rating content will be loaded here -->
+            </div>
+
+            <div id="reviewTabs" style="display: none; justify-content: center; gap: 15px; margin-bottom: 30px;">
+                <button id="btnAllReviews" class="review-tab active" style="padding: 10px 24px; border: none; border-radius: 99px; font-weight: 600; cursor: pointer; transition: all 0.3s; background: linear-gradient(135deg, #ef4136, #c73b0c); color: white; box-shadow: 0 4px 14px rgba(239, 65, 54, 0.3);">Tất cả đánh giá</button>
+                <button id="btnMyReviews" class="review-tab" style="padding: 10px 24px; border: none; border-radius: 99px; font-weight: 600; cursor: pointer; transition: all 0.3s; background: #e2e8f0; color: #475569;">Đánh giá của tôi</button>
+            </div>
+
+            <div id="reviewsContainer" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Reviews will be loaded here via JS -->
+                <div style="text-align: center; width: 100%; color: #64748b;">Đang tải đánh giá...</div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/notifications.js"></script>
     <script src="js/Search.js"></script>
     <script src="js/Header.js"></script>
-    <script src="js/Index.js"></script>
-    <script>
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                if (typeof initHeader === 'function') {
-                    initHeader();
-                }
-                if (typeof initAuth === 'function') {
-                    initAuth();
-                }
-            })
-            .catch(err => console.error("Lỗi tải header:", err));
-    </script>
+    <script src="js/Index.js?v=2"></script>
+
 </body>
 
 </html>

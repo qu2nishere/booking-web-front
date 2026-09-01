@@ -1,7 +1,7 @@
 {
   "name": "Project_CuoiKy_OOSE_Frontend_FIT_HCMUTE",
   "version": "1.0.0",
-  "description": "Website đặt phòng khách sạn Hotel Style",
+  "description": "Website đặt phòng khách sạn Mây Vàng",
   "main": "index.html",
   "scripts": {
     "start": "npx serve ."

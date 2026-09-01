@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Đặt phòng - Khách sạn phong cách</title>
+    <title>Đặt phòng - Khách sạn Mây Vàng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/Background.css">
-    <link rel="stylesheet" href="css/room.css">
-    <link rel="stylesheet" href="css/Global.css">
+    <link rel="stylesheet" href="css/Header.css">
+    <link rel="stylesheet" href="css/room.css?v=2">
+    <link rel="stylesheet" href="css/Global.css?v=4">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="css/CustomSelect.css?v=4">
 </head>
 <body>
     <div id="header-placeholder"></div>
+    <script src="js/SharedHeader.js"></script>
 
     <section class="room-search-section">
         <div class="room-search-container">
@@ -20,13 +24,13 @@
             </div>
 
             <div class="room-search-box">
-                <form id="roomSearchForm" class="room-search-form">
+                <form id="roomSearchForm" class="room-search-form" novalidate>
                     <div class="room-search-grid">
                         <div class="room-search-field">
                             <label><i class="fas fa-calendar-alt"></i> Ngày nhận phòng</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-calendar-day input-icon-left"></i>
-                                <input type="date" name="checkin" class="room-search-input" required>
+                                <input type="date" name="checkin" class="room-search-input" placeholder="dd/mm/yyyy" required>
                             </div>
                         </div>
 
@@ -34,7 +38,7 @@
                             <label><i class="fas fa-calendar-alt"></i> Ngày trả phòng</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-calendar-day input-icon-left"></i>
-                                <input type="date" name="checkout" class="room-search-input" required>
+                                <input type="date" name="checkout" class="room-search-input" placeholder="dd/mm/yyyy" required>
                             </div>
                         </div>
 
@@ -77,12 +81,14 @@
                                 <i class="fas fa-crown input-icon-left"></i>
                                 <select name="roomType" class="room-search-select">
                                     <option value="all">Tất cả</option>
+                                    <option value="Standard">Standard</option>
                                     <option value="Basic">Basic</option>
                                     <option value="Superior">Superior</option>
                                     <option value="Deluxe">Deluxe</option>
                                     <option value="Royal">Royal</option>
                                     <option value="Junior Suite">Junior Suite</option>
                                     <option value="Family Suite">Family Suite</option>
+                                    <option value="Presidential Suite">Presidential Suite</option>
                                 </select>
                                 <i class="fas fa-chevron-down input-icon-right"></i>
                             </div>
@@ -105,26 +111,22 @@
                 </div>
 
                 <div id="room-result-list" class="room-result-list"></div>
-
-                <div id="booking-action" class="booking-action" style="display:none;">
-                    <button id="btn-create-booking" class="confirm-booking-btn">Tạo booking</button>
-                </div>
             </section>
         </div>
     </section>
+    <div id="booking-action" class="booking-action" style="display:none;">
+        <button id="btn-create-booking" class="confirm-booking-btn">Đặt phòng</button>
+        <span id="booking-selection-info" class="booking-selection-info">
+            Đã chọn <strong id="selected-count">0</strong> / <strong id="required-count">0</strong> phòng
+        </span>
+    </div>
 
-    <script src="js/notifications.js"></script>
-    <script src="js/Header.js"></script>
-    <script src="js/RoomSearch.js"></script>
-    <script>
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                if (typeof initHeader === 'function') initHeader();
-                if (typeof initAuth === 'function') initAuth();
-            })
-            .catch(err => console.error("Lỗi tải header:", err));
-    </script>
+    <script src="js/notifications.js?v=4"></script>
+    <script src="js/Header.js?v=2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
+    <script src="js/CustomSelect.js?v=4"></script>
+    <script src="js/RoomSearch.js?v=4"></script>
+
 </body>
 </html>

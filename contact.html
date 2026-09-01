@@ -6,15 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liên hệ - Nhóm phát triển</title>
     <link rel="stylesheet" href="css/Global.css">
-    <link rel="stylesheet" href="css/Contact.css">
+    <link rel="stylesheet" href="css/Header.css">
+    <link rel="stylesheet" href="css/contact.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <div id="header-placeholder"></div>
+    <script src="js/SharedHeader.js"></script>
+    <script src="js/notifications.js"></script>
 
     <main class="contact-main">
         <section class="page-header">
+            <div class="header-decor">
+                <span class="shape shape-1"></span>
+                <span class="shape shape-2"></span>
+                <span class="shape shape-3"></span>
+                <span class="shape shape-4"></span>
+            </div>
             <div class="container">
                 <h1>Gặp gỡ Đội ngũ Phát triển</h1>
                 <p>Những người đứng sau dự án khách sạn trực tuyến của chúng tôi</p>
@@ -29,47 +38,22 @@
             </div>
         </section>
 
-        <section class="resources-section">
+        <section class="slogan-section">
+            <div class="header-decor">
+                <span class="shape shape-5"></span>
+                <span class="shape shape-6"></span>
+            </div>
             <div class="container">
-                <h2 class="section-title">Tài nguyên dự án</h2>
-                <div class="resources-grid">
-                    <a href="#" class="resource-card" id="report-link" target="_blank">
-                        <div class="resource-icon">📄</div>
-                        <h3>Báo cáo dự án</h3>
-                        <p>Xem báo cáo chi tiết (PDF)</p>
-                    </a>
-                    <a href="#" class="resource-card" id="github-frontend-link" target="_blank">
-                        <div class="resource-icon">💻</div>
-                        <h3>GitHub Frontend</h3>
-                        <p>Mã nguồn giao diện người dùng</p>
-                    </a>
-                    <a href="#" class="resource-card" id="github-backend-link" target="_blank">
-                        <div class="resource-icon">⚙️</div>
-                        <h3>GitHub Backend</h3>
-                        <p>Mã nguồn xử lý logic và API</p>
-                    </a>
-                </div>
+                <p class="slogan-eyebrow">Mây Vàng</p>
+                <h2 class="slogan-text">Mỗi chuyến đi là một câu chuyện — <span>hãy để chúng tôi viết tiếp cùng bạn</span></h2>
+                <a href="index.html" class="btn-slogan">Khám phá phòng ngay <i class="fas fa-arrow-right"></i></a>
             </div>
         </section>
     </main>
 
-    <script src="js/Contact.js"></script>
+    <script src="js/contact.js"></script>
     <script src="js/Header.js"></script>
-    <script>
-        // Tải header từ header.html (tương tự như index)
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                if (typeof initHeader === 'function') {
-                    initHeader();
-                }
-                if (typeof initAuth === 'function') {
-                    initAuth();
-                }
-            })
-            .catch(err => console.error("Lỗi tải header:", err));
-    </script>
+
 </body>
 
 </html>

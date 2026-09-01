@@ -1,25 +1,55 @@
+
+
 .profile-page {
     min-height: 100vh;
-    background:
-        linear-gradient(135deg, rgba(248, 216, 16, 0.92), rgba(254, 123, 24, 0.92)),
-        url('../asset/Hotel_BG.jpg') center/cover no-repeat;
+    background: #fdf6ee;
     padding-bottom: 60px;
 }
 
 .profile-hero {
     position: relative;
-    height: 360px;
+    height: 340px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 120px 20px 40px;
+    background: linear-gradient(135deg, #f15a24 0%, #fe7b18 55%, #f8b400 100%);
+    overflow: hidden;
 }
 
 .profile-hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.35);
+    background:
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.18), transparent 45%),
+        rgba(0, 0, 0, 0.06);
+}
+
+/* Hình khối trang trí ở hero */
+.profile-hero .header-decor {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.profile-hero .shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.profile-hero .shape-1 { width: 160px; height: 160px; top: 12%; left: 8%; }
+.profile-hero .shape-2 { width: 110px; height: 110px; bottom: 10%; right: 12%; background: rgba(255, 255, 255, 0.1); }
+.profile-hero .shape-3 { width: 70px; height: 70px; top: 60%; left: 24%; background: rgba(255, 255, 255, 0.12); }
+.profile-hero .shape-4 { width: 90px; height: 90px; top: 15%; right: 20%; background: rgba(255, 255, 255, 0.08); }
+
+@media (max-width: 768px) {
+    .profile-hero .shape {
+        display: none;
+    }
 }
 
 .profile-hero-content {
@@ -48,6 +78,14 @@
     padding: 0 20px;
     position: relative;
     z-index: 3;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+}
+
+.profile-wrapper.loaded {
+    opacity: 1;
+    visibility: visible;
 }
 
 .profile-grid {
@@ -79,13 +117,14 @@
 }
 
 .avatar-wrap {
-    width: 128px;
-    height: 128px;
-    margin: 0 auto 18px;
+    position: relative;
+    width: 118px;
+    height: 118px;
+    margin: 0 auto 16px;
     border-radius: 50%;
-    padding: 5px;
-    background: linear-gradient(135deg, #ef4136, #fe7b18, #f8d810);
-    box-shadow: 0 10px 24px rgba(239, 65, 54, 0.2);
+    padding: 4px;
+    background: linear-gradient(135deg, #f15a24, #fe7b18);
+    box-shadow: 0 8px 20px rgba(241, 90, 36, 0.22);
 }
 
 .avatar-wrap img {
@@ -94,72 +133,136 @@
     object-fit: cover;
     border-radius: 50%;
     background: #f8fafc;
+    border: 3px solid #fff;
+}
+
+.avatar-edit-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ef4136, #c73b0c);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 10px rgba(239, 65, 54, 0.35);
+    transition: transform 0.2s ease;
+}
+
+.avatar-edit-badge:hover {
+    transform: scale(1.08);
 }
 
 .profile-card h2 {
-    font-size: 1.45rem;
+    font-size: 1.4rem;
     color: #1f2937;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .profile-card p {
     color: #64748b;
-    font-size: 0.95rem;
-    word-break: break-word;
-}
-
-.tier-badge {
-    margin: 18px auto 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 9px 18px;
-    border-radius: 999px;
-    font-weight: 700;
     font-size: 0.92rem;
-    background: rgba(239, 65, 54, 0.12);
-    color: #ef4136;
+    word-break: break-word;
+    margin-bottom: 16px;
 }
 
-.point-box {
-    margin-top: 18px;
-    padding: 18px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #fff7ed, #ffffff);
-    border: 1px solid #fed7aa;
+/* Tier badge trong sidebar */
+.sidebar-tier {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    padding: 5px 16px;
+    border-radius: 999px;
+    background: rgba(241, 90, 36, 0.10);
+    color: #c2410c;
+    margin-bottom: 16px;
 }
 
-.point-box span {
-    display: block;
-    font-size: 0.9rem;
-    color: #64748b;
+.sidebar-tier.tier-silver { background: rgba(148, 163, 184, 0.18); color: #475569; }
+.sidebar-tier.tier-gold { background: rgba(234, 179, 8, 0.16); color: #a16207; }
+.sidebar-tier.tier-platinum { background: rgba(99, 102, 241, 0.14); color: #4f46e5; }
+
+.sidebar-point {
+    padding: 14px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #fff8f1, #fff);
+    border: 1px solid #fde3cb;
     margin-bottom: 6px;
 }
 
-.point-box strong {
-    font-size: 2rem;
-    color: #ef4136;
+.sidebar-point span {
+    display: block;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-bottom: 4px;
 }
 
-.benefit-box {
-    margin-top: 18px;
-    text-align: left;
-    padding: 18px;
-    border-radius: 20px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+.sidebar-point strong {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: #f15a24;
 }
 
-.benefit-box h4 {
-    margin-bottom: 8px;
-    color: #0f172a;
-    font-size: 1rem;
+/* Sidebar Navigation Tabs */
+.profile-nav {
+    margin-top: 10px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
 }
 
-.benefit-box p {
+#profile-tabs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#profile-tabs li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    text-decoration: none;
     color: #475569;
-    line-height: 1.65;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    text-align: left;
 }
+
+#profile-tabs li a i {
+    width: 18px;
+    text-align: center;
+    color: #94a3b8;
+    transition: color 0.2s ease;
+}
+
+#profile-tabs li a:hover {
+    background: #fff7ed;
+    color: #f15a24;
+}
+
+#profile-tabs li a:hover i { color: #f15a24; }
+
+#profile-tabs li a.active {
+    background: linear-gradient(135deg, #f15a24, #fe7b18);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(241, 90, 36, 0.25);
+}
+
+#profile-tabs li a.active i { color: #fff; }
+
+
 
 .profile-content {
     display: flex;
@@ -169,6 +272,26 @@
 
 .content-card {
     padding: 28px;
+    transition: box-shadow 0.25s ease;
+}
+
+.content-card:hover {
+    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.14);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tab-content {
+    animation: fadeInUp 0.35s ease;
 }
 
 .card-header {
@@ -197,38 +320,108 @@
 }
 
 .avatar-upload-box {
-    padding: 20px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #fff7ed, #ffffff);
-    border: 1px solid #fed7aa;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid #f1ede8;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
 .avatar-upload-label {
-    display: block;
-    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
     font-weight: 700;
     color: #1f2937;
 }
 
-.avatar-upload-box input {
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 16px;
-    border: 2px solid #e5e7eb;
-    outline: none;
-    transition: all 0.2s ease;
-    font-size: 0.95rem;
+.avatar-upload-label i { color: #f15a24; }
+
+.avatar-upload-inner {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.avatar-upload-box input:focus {
-    border-color: #ef4136;
-    box-shadow: 0 0 0 4px rgba(239, 65, 54, 0.12);
+/* Ẩn input file gốc, dùng label làm nút chọn */
+#avatarFile {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
 }
+
+.avatar-file-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 220px;
+    padding: 12px 16px;
+    border: 1.5px dashed #fdba74;
+    border-radius: 14px;
+    background: #fff8f1;
+    color: #b45309;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.avatar-file-trigger:hover {
+    border-color: #f15a24;
+    background: #fff1e6;
+}
+
+.avatar-file-trigger i { color: #f15a24; }
+
+.btn-upload-avatar {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f15a24, #fe7b18);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 16px rgba(241, 90, 36, 0.22);
+}
+
+.btn-upload-avatar:hover { transform: translateY(-1px); }
+.btn-upload-avatar:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
 
 .avatar-upload-box small {
     display: block;
-    margin-top: 10px;
+    margin-top: 12px;
+    color: #94a3b8;
+    font-size: 0.84rem;
+}
+
+.avatar-upload-status {
+    margin-top: 12px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
     color: #64748b;
+    font-size: 0.9rem;
+}
+
+.avatar-upload-status.success {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.22);
+    color: #059669;
+}
+
+.avatar-upload-status.error {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #dc2626;
 }
 
 .form-grid {
@@ -247,6 +440,13 @@
     font-size: 0.92rem;
     font-weight: 700;
     color: #1f2937;
+}
+
+.input-group label i {
+    color: #f15a24;
+    margin-right: 6px;
+    width: 14px;
+    text-align: center;
 }
 
 .input-group input {
@@ -313,6 +513,11 @@
     margin-bottom: 10px;
 }
 
+.membership-item span i {
+    color: #f15a24;
+    margin-right: 6px;
+}
+
 .membership-item strong {
     font-size: 1.4rem;
     color: #ef4136;
@@ -347,6 +552,12 @@
     background: linear-gradient(180deg, #fff, #f8fafc);
     overflow: hidden;
     box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.booking-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
 }
 
 .booking-top {
@@ -424,7 +635,7 @@
     border-radius: 18px;
     background: #fff;
     border: 1px solid #e2e8f0;
-    align-items: center;
+    align-items: start;
 }
 
 .booking-room-item strong {
@@ -447,7 +658,8 @@
     padding-top: 18px;
     border-top: 1px dashed #dbeafe;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
     font-size: 1rem;
     color: #1f2937;
     font-weight: 700;
@@ -464,6 +676,153 @@
     border-radius: 20px;
     background: #fff7ed;
     color: #64748b;
+}
+
+/* ===== Đánh giá của tôi ===== */
+.my-reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.review-card {
+    border-radius: 22px;
+    border: 1px solid #e2e8f0;
+    background: linear-gradient(180deg, #fff, #f8fafc);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+    padding: 20px 22px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
+}
+
+.review-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.review-card-top h4 {
+    font-size: 1.05rem;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
+
+.review-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    color: #94a3b8;
+    font-size: 0.86rem;
+}
+
+.review-anon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: rgba(217, 119, 6, 0.1);
+    color: #b45309;
+    font-weight: 600;
+}
+
+.review-card-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn-icon-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.btn-icon-edit {
+    background: rgba(241, 90, 36, 0.1);
+    color: #c2410c;
+}
+
+.btn-icon-edit:hover {
+    background: linear-gradient(135deg, #f15a24, #fe7b18);
+    color: #fff;
+}
+
+.btn-icon-delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+}
+
+.btn-icon-delete:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+.review-stars {
+    color: #fbbf24;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-score {
+    color: #64748b;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.review-comment {
+    color: #475569;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.review-images {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.review-images img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.review-reply {
+    margin-top: 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #475569;
+}
+
+.review-reply strong {
+    color: #c2410c;
+}
+
+.review-reply p {
+    margin-top: 6px;
+    line-height: 1.6;
 }
 
 @media (max-width: 1100px) {
@@ -505,62 +864,228 @@
     }
 }
 
-.avatar-upload-inner {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-#avatarFile {
-    flex: 1;
-    min-width: 220px;
-    padding: 12px 14px;
-    border: 2px dashed #fdba74;
-    border-radius: 16px;
-    background: #fff;
-    cursor: pointer;
-}
-
-.btn-upload-avatar {
-    padding: 12px 22px;
-    border: none;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #ef4136, #fe7b18);
-    color: white;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 10px 20px rgba(239, 65, 54, 0.18);
-}
-
-.btn-upload-avatar:hover {
-    transform: translateY(-2px);
-}
-
-.avatar-upload-status {
-    margin-top: 12px;
-    padding: 12px 14px;
-    border-radius: 14px;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    color: #64748b;
-    font-size: 0.92rem;
-}
-
-.avatar-upload-status.success {
-    background: rgba(16, 185, 129, 0.08);
-    border-color: rgba(16, 185, 129, 0.22);
-    color: #059669;
-}
-
-.avatar-upload-status.error {
-    background: rgba(239, 68, 68, 0.08);
-    border-color: rgba(239, 68, 68, 0.2);
-    color: #dc2626;
-}
-
 .booking-item-highlight {
     border: 2px solid #f59e0b;
     box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.12), 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+/* ===== Bảng phân hạng thành viên ===== */
+.membership-benefits-panel h4,
+.tier-table-panel h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.membership-benefits-panel h4 i,
+.tier-table-panel h4 i { color: #f15a24; }
+
+.tier-table-panel {
+    margin-top: 18px;
+    padding: 20px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #eef2f7;
+}
+
+.tier-table-panel h4 { margin-bottom: 14px; color: #1f2937; }
+
+.tier-table-scroll { overflow-x: auto; }
+
+.tier-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    min-width: 460px;
+}
+
+.tier-table th,
+.tier-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.tier-table th {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+.tier-table td { color: #475569; }
+
+.tier-table tr.tier-row-active td {
+    background: #fff7ed;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.tier-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.82rem;
+}
+
+.tier-pill-bronze { background: rgba(241, 90, 36, 0.12); color: #c2410c; }
+.tier-pill-silver { background: rgba(148, 163, 184, 0.20); color: #475569; }
+.tier-pill-gold { background: rgba(234, 179, 8, 0.18); color: #a16207; }
+.tier-pill-platinum { background: rgba(99, 102, 241, 0.16); color: #4f46e5; }
+
+.btn-save-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== Review Modal ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay[style*="display: flex"] {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background: #ffffff;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay[style*="display: flex"] .modal-container {
+    transform: translateY(0);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #f15a24, #fe7b18);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.btn-close-modal {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-close-modal:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.star-rating i {
+    font-size: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    margin: 0 2px;
+}
+
+.star-rating i:hover {
+    transform: scale(1.1);
+}
+
+.star-rating i.active,
+.star-rating i.hover {
+    color: #f59e0b; /* Vàng kim */
+}
+
+#reviewComment {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.2s;
+    background: #f8fafc;
+}
+
+#reviewComment:focus {
+    outline: none;
+    border-color: #f15a24;
+    background: #ffffff;
+}
+
+.modal-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-cancel {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #e2e8f0;
+}
+
+.btn-submit-review {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #ef4136, #c73b0c);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(239, 65, 54, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-submit-review:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 65, 54, 0.4);
 }

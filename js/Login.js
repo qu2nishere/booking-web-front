@@ -1,7 +1,7 @@
 class LoginService {
     constructor() {
         // Địa chỉ API đăng nhập của Backend
-        this.apiUrl = "http://localhost:8080/api/auth/login"; 
+        this.apiUrl = "https://mayvang-api.onrender.com/api/auth/login";
     }
 
     async loginUser(loginData, rememberMe) {
@@ -11,7 +11,9 @@ class LoginService {
         try {
             const response = await fetch(this.apiUrl, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(loginData)
             });
 
@@ -25,30 +27,29 @@ class LoginService {
 
             // 2. Xử lý kết quả
             if (response.ok) {
-    notify.show("Đăng nhập thành công! Chào mừng trở lại.", "success");
+                notify.show("Đăng nhập thành công! Chào mừng trở lại.", "success");
 
-    localStorage.setItem('current_user', result.username || loginData.username);
-    localStorage.setItem('role', result.role);
+                localStorage.setItem('current_user', result.username || loginData.username);
+                localStorage.setItem('role', result.role);
 
-    if (rememberMe) {
-        localStorage.setItem('rememberedUser', loginData.username);
-    } else {
-        localStorage.removeItem('rememberedUser');
-    }
+                if (rememberMe) {
+                    localStorage.setItem('rememberedUser', loginData.username);
+                } else {
+                    localStorage.removeItem('rememberedUser');
+                }
 
-    if (result.token) {
-        localStorage.setItem('jwt_token', result.token);
-    }
+                if (result.token) {
+                    localStorage.setItem('jwt_token', result.token);
+                }
 
-    setTimeout(() => {
-        if (result.role === 'MANAGER') {
-            window.location.href = 'admin.html';
-        } else {
-            window.location.href = 'index.html';
-        }
-    }, 1200);
-}
-            else if (response.status === 400) {
+                setTimeout(() => {
+                    if (result.role === 'MANAGER') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }, 1200);
+            } else if (response.status === 400) {
                 // Lỗi Validation từ LoginRequest.java (ví dụ: để trống)
                 if (result.errors && Array.isArray(result.errors)) {
                     result.errors.forEach(err => {
@@ -65,18 +66,16 @@ class LoginService {
                 } else {
                     notify.show(result.message || "Thông tin không hợp lệ", "error");
                 }
-            } 
-            else if (response.status === 401 || response.status === 403) {
+            } else if (response.status === 401 || response.status === 403) {
                 // Lỗi Sai tài khoản hoặc mật khẩu
                 notify.show("Tên đăng nhập hoặc mật khẩu không chính xác!", "error");
-            } 
-            else {
+            } else {
                 notify.show("Lỗi máy chủ (Code: " + response.status + ")", "error");
             }
 
         } catch (error) {
             console.error("Lỗi kết nối:", error);
-            notify.show("⚠️ Không thể kết nối tới máy chủ Backend.", "error");
+            notify.show("Không thể kết nối tới máy chủ.", "error");
         }
     }
 }
@@ -93,19 +92,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('loginUsername').value = rememberedUser;
         if (rememberCheckbox) rememberCheckbox.checked = true;
     }
+
+    // Nút "Đăng nhập với Google"
+    if (typeof renderGoogleButton === 'function') {
+        renderGoogleButton('googleBtn');
+    }
 });
 
 // Xử lý sự kiện khi nhấn Đăng nhập
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Ngăn trang tự reload
-        
+
         // Gom dữ liệu đúng với tên biến trong LoginRequest.java
         const loginData = {
             username: document.getElementById('loginUsername').value.trim(),
             password: document.getElementById('loginPassword').value
         };
-        
+
         const isRemember = rememberCheckbox ? rememberCheckbox.checked : false;
 
         console.log("Đang gửi yêu cầu đăng nhập...");

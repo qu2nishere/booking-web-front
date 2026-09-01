@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
 }
 /* 1. Kéo giãn khung chứa mây lấp đầy màn hình */
 .background-clouds-wrapper {
@@ -68,7 +67,6 @@ body {
     overflow-x: hidden;
     animation: gradientMove 8s ease infinite;
     background-size: 400% 400%;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 body::before {
     content: '';

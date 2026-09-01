@@ -1,6 +1,6 @@
 class RoomSearchService {
     constructor() {
-        this.baseUrl = "http://localhost:8080";
+        this.baseUrl = "https://mayvang-api.onrender.com";
         this.selectedRooms = [];
         this.lastSearchPayload = null;
         this.bindEvents();
@@ -38,12 +38,30 @@ class RoomSearchService {
         const guests = form.guests.value;
         const roomType = form.roomType.value;
 
-        this.lastSearchPayload = { 
-            checkin, 
-            checkout, 
-            numberOfRooms, 
-            guests, 
-            roomType 
+        // Validation dữ liệu đầu vào
+        if (!checkin) {
+            notify.show("Vui lòng chọn Ngày nhận phòng.", "error");
+            return;
+        }
+        if (!checkout) {
+            notify.show("Vui lòng chọn Ngày trả phòng.", "error");
+            return;
+        }
+
+        const checkinDate = new Date(checkin);
+        const checkoutDate = new Date(checkout);
+
+        if (checkoutDate <= checkinDate) {
+            notify.show("Ngày trả phòng phải lớn hơn ngày nhận phòng.", "error");
+            return;
+        }
+
+        this.lastSearchPayload = {
+            checkin,
+            checkout,
+            numberOfRooms,
+            guests,
+            roomType
         };
 
         const query = new URLSearchParams({
@@ -76,11 +94,12 @@ class RoomSearchService {
         const bookingAction = document.getElementById("booking-action");
 
         container.innerHTML = "";
+        container.classList.remove("has-selection");
         this.selectedRooms = [];
 
-        summary.innerText = result.enough
-            ? `Tìm thấy ${result.totalFound} phòng phù hợp. Bạn đang yêu cầu ${result.requested} phòng.`
-            : (result.warning || "Không đủ phòng phù hợp.");
+        summary.innerText = result.enough ?
+            `Tìm thấy ${result.totalFound} phòng phù hợp. Bạn đang yêu cầu ${result.requested} phòng.` :
+            (result.warning || "Không đủ phòng phù hợp.");
 
         if (!result.rooms || result.rooms.length === 0) {
             container.innerHTML = `<div class="empty-room-state">Không có phòng trống phù hợp trong thời gian bạn chọn.</div>`;
@@ -88,18 +107,40 @@ class RoomSearchService {
             return;
         }
 
+        if (!result.enough) {
+            container.innerHTML = `<div class="empty-room-state">Rất tiếc! Chỉ còn ${result.totalFound} phòng trống, không đủ ${result.requested} phòng như bạn yêu cầu. Vui lòng tìm kiếm lại với số lượng phòng ít hơn.</div>`;
+            bookingAction.style.display = "none";
+            return;
+        }
+
+        // Cập nhật counter trên thanh booking
+        const requiredCount = document.getElementById("required-count");
+        if (requiredCount) requiredCount.textContent = result.requested;
+        this.updateSelectionUI();
+
         result.rooms.forEach(room => {
             const card = document.createElement("div");
             card.className = "room-card-beauty";
+            card.dataset.roomId = room.roomID;
+            card.dataset.price = room.roomType.priceRoom;
+            card.dataset.roomNumber = room.roomNumber;
+
+            const price = room.roomType.priceRoom;
+            const isPremium = price >= 3000000;
+            const hasView = room.description && /view/i.test(room.description);
+            const description = room.description || "Không gian sang trọng, đầy đủ tiện nghi.";
+
             card.innerHTML = `
+                ${isPremium ? `<div class="room-premium-badge"><i class="fas fa-crown"></i> Cao cấp</div>` : ""}
                 <div class="room-card-top">
                     <div>
                         <span class="room-badge">${room.roomType.typeName}</span>
+                        ${hasView ? `<span class="room-view-badge"><i class="fas fa-mountain-sun"></i> Tầm nhìn đẹp</span>` : ""}
                         <h3>${room.roomNumber}</h3>
-                        <p>${room.description || "Không gian sang trọng, đầy đủ tiện nghi."}</p>
+                        <p class="room-desc">${hasView ? '<i class="fas fa-mountain-sun"></i> ' : ''}${description}</p>
                     </div>
                     <div class="room-price">
-                        <strong>${this.formatMoney(room.roomType.priceRoom)}</strong>
+                        <strong>${this.formatMoney(price)}</strong>
                         <span>/ đêm</span>
                     </div>
                 </div>
@@ -108,30 +149,55 @@ class RoomSearchService {
                     <div><i class="fas fa-users"></i> ${room.roomType.occupancy} khách</div>
                     <div><i class="fas fa-circle-check"></i> ${room.status}</div>
                 </div>
-
-                <label class="room-select-box">
-                    <input type="checkbox" 
-                           value="${room.roomID}" 
-                           data-price="${room.roomType.priceRoom}" 
-                           data-room="${room.roomNumber}">
-                    <span>Chọn phòng này</span>
-                </label>
             `;
 
+            // Click toàn bộ card để chọn / bỏ chọn
+            card.addEventListener("click", () => this.handleCardClick(card));
             container.appendChild(card);
         });
 
-        // Gắn sự kiện cho checkbox
-        container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            cb.addEventListener("change", () => this.handleSelectRoom());
-        });
-
-        bookingAction.style.display = "block";
+        bookingAction.style.display = "flex";
     }
 
-    handleSelectRoom() {
-        const checked = document.querySelectorAll('#room-result-list input[type="checkbox"]:checked');
-        this.selectedRooms = Array.from(checked).map(item => Number(item.value));
+    handleCardClick(card) {
+        const roomId = Number(card.dataset.roomId);
+        const requestedRooms = Number(this.lastSearchPayload.numberOfRooms);
+        const isSelected = card.classList.contains("room-selected");
+
+        if (isSelected) {
+            // Bỏ chọn
+            card.classList.remove("room-selected");
+            this.selectedRooms = this.selectedRooms.filter(id => id !== roomId);
+        } else {
+            // Kiểm tra giới hạn
+            if (this.selectedRooms.length >= requestedRooms) {
+                notify.show(
+                    `Bạn chỉ được chọn tối đa ${requestedRooms} phòng (theo số lượng tìm kiếm). Bỏ chọn phòng khác trước khi chọn thêm.`,
+                    "warning",
+                    "top"
+                );
+                return;
+            }
+            card.classList.add("room-selected");
+            this.selectedRooms.push(roomId);
+        }
+
+        this.updateSelectionUI();
+    }
+
+    updateSelectionUI() {
+        const container = document.getElementById("room-result-list");
+        const selectedCount = document.getElementById("selected-count");
+
+        // Toggle lớp dimmed cho các card chưa chọn
+        if (this.selectedRooms.length > 0) {
+            container.classList.add("has-selection");
+        } else {
+            container.classList.remove("has-selection");
+        }
+
+        // Cập nhật counter
+        if (selectedCount) selectedCount.textContent = this.selectedRooms.length;
     }
 
     async handleCreateBooking() {
@@ -152,12 +218,18 @@ class RoomSearchService {
             return;
         }
 
+        const requestedRooms = Number(this.lastSearchPayload.numberOfRooms);
+        if (this.selectedRooms.length !== requestedRooms) {
+            notify.show(`Vui lòng chọn đúng ${requestedRooms} phòng như đã yêu cầu`, "error");
+            return;
+        }
+
         const payload = {
             checkin: this.lastSearchPayload.checkin,
             checkout: this.lastSearchPayload.checkout,
             roomIds: this.selectedRooms,
             guests: Number(this.lastSearchPayload.guests),
-            numberOfRooms: Number(this.lastSearchPayload.numberOfRooms)
+            numberOfRooms: requestedRooms
         };
 
         try {

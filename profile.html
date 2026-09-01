@@ -4,19 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Hồ sơ cá nhân - Hotel Style</title>
-    <link rel="stylesheet" href="css/Global.css">
-    <link rel="stylesheet" href="css/Header.css">
-    <link rel="stylesheet" href="css/profile.css">
+    <title>Hồ sơ cá nhân - Mây Vàng</title>
+    <link rel="stylesheet" href="css/Global.css?v=3">
+    <link rel="stylesheet" href="css/Header.css?v=3">
+    <link rel="stylesheet" href="css/profile.css?v=3">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <div id="header-placeholder"></div>
+    <script src="js/SharedHeader.js"></script>
 
-    <main class="profile-page">
+    <main class="profile-page" id="main-profile-content">
         <section class="profile-hero">
             <div class="profile-hero-overlay"></div>
+            <div class="header-decor">
+                <span class="shape shape-1"></span>
+                <span class="shape shape-2"></span>
+                <span class="shape shape-3"></span>
+                <span class="shape shape-4"></span>
+            </div>
             <div class="profile-hero-content">
                 <h1>QUẢN LÝ TÀI KHOẢN CÁ NHÂN</h1>
                 <p>Xem thông tin, cập nhật hồ sơ, theo dõi hạng thành viên và lịch sử đặt phòng.</p>
@@ -29,29 +36,58 @@
                 <aside class="profile-sidebar">
                     <div class="profile-card">
                         <div class="avatar-wrap">
-                            <img id="profileAvatarPreview" src="asset/default-avatar.png" alt="Avatar">
+                            <img id="profileAvatarPreview" src="asset/default-avatar.png" alt="Avatar" referrerpolicy="no-referrer" onerror="this.src='asset/default-avatar.png'">
+                            <label for="avatarFile" class="avatar-edit-badge" title="Đổi ảnh đại diện">
+                                <i class="fas fa-camera"></i>
+                            </label>
                         </div>
                         <h2 id="sidebarUsername">Đang tải...</h2>
                         <p id="sidebarEmail">--</p>
 
-                        <div class="tier-badge" id="tierBadge">Bronze</div>
+                        <span class="sidebar-tier" id="sidebarTier">Bronze</span>
 
-                        <div class="point-box">
+                        <div class="sidebar-point">
                             <span>Điểm tích lũy</span>
-                            <strong id="profilePoint">0</strong>
+                            <strong id="sidebarPoint">0</strong>
                         </div>
 
-                        <div class="benefit-box">
-                            <h4>Quyền lợi hạng</h4>
-                            <p id="profileBenefits">Đang tải quyền lợi...</p>
-                        </div>
+                        <!-- Navigation Tabs -->
+                        <nav class="profile-nav">
+                            <ul id="profile-tabs">
+                                <li>
+                                    <a href="#" data-target="tab-personal" class="active">
+                                        <i class="fas fa-user"></i> Thông tin cá nhân
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="tab-password">
+                                        <i class="fas fa-lock"></i> Đổi mật khẩu
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="tab-membership">
+                                        <i class="fas fa-crown"></i> Hạng thành viên
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="tab-history">
+                                        <i class="fas fa-clock-rotate-left"></i> Lịch sử đặt phòng
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="tab-myreviews">
+                                        <i class="fas fa-comment-dots"></i> Đánh giá của tôi
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </aside>
 
                 <!-- Main content -->
                 <div class="profile-content">
-                    <!-- Personal Info -->
-                    <section class="content-card">
+                    <!-- UC09: Xem & cập nhật thông tin cá nhân -->
+                    <section class="content-card tab-content active" id="tab-personal">
                         <div class="card-header">
                             <div>
                                 <h3>Thông tin cá nhân</h3>
@@ -61,9 +97,14 @@
 
                         <form id="profileForm" class="profile-form">
                             <div class="avatar-upload-box">
-                                <label class="avatar-upload-label">Ảnh đại diện</label>
+                                <label class="avatar-upload-label">
+                                    Ảnh đại diện
+                                </label>
 
                                 <div class="avatar-upload-inner">
+                                    <label for="avatarFile" class="avatar-file-trigger">
+                                        <span>Chọn ảnh từ máy tính</span>
+                                    </label>
                                     <input type="file" id="avatarFile" accept="image/*">
                                     <button type="button" id="uploadAvatarBtn" class="btn-upload-avatar">
                                         Tải ảnh lên
@@ -76,41 +117,88 @@
 
                                 <input type="hidden" id="avatar">
 
-                                <small>
-                                    Chọn ảnh từ máy tính, hệ thống sẽ tự upload lên CDN và lưu vào hồ sơ của bạn.
-                                </small>
+
                             </div>
 
                             <div class="form-grid">
                                 <div class="input-group">
-                                    <label>Tên đăng nhập</label>
-                                    <input type="text" id="username" placeholder="Nhập tên đăng nhập">
+                                    <label><i class="fas fa-user"></i> Tên đăng nhập</label>
+                                    <input type="text" id="username" placeholder="Nhập tên đăng nhập" required maxlength="50">
                                 </div>
 
                                 <div class="input-group">
-                                    <label>Email</label>
-                                    <input type="email" id="email" placeholder="Nhập email">
+                                    <label><i class="fas fa-envelope"></i> Email</label>
+                                    <input type="email" id="email" placeholder="Nhập email" required maxlength="100">
                                 </div>
 
                                 <div class="input-group">
-                                    <label>Số điện thoại</label>
-                                    <input type="tel" id="phone" placeholder="Nhập số điện thoại">
+                                    <label><i class="fas fa-phone"></i> Số điện thoại</label>
+                                    <input type="tel" id="phone" placeholder="Nhập số điện thoại" required pattern="^[0-9]{10}$" maxlength="10" title="Số điện thoại phải đúng 10 chữ số" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 </div>
 
                                 <div class="input-group">
-                                    <label>Ngày sinh</label>
-                                    <input type="date" id="dateOfBirth">
+                                    <label><i class="fas fa-cake-candles"></i> Ngày sinh</label>
+                                    <input type="date" id="dateOfBirth" required max="2010-01-01">
                                 </div>
                             </div>
 
                             <div class="profile-form-actions">
-                                <button type="submit" class="btn-save-profile">Lưu thay đổi</button>
+                                <button type="submit" id="btnSaveProfile" class="btn-save-profile">
+                                    Lưu thay đổi
+                                </button>
                             </div>
                         </form>
                     </section>
 
-                    <!-- Membership -->
-                    <section class="content-card">
+                    <!-- Change Password -->
+                    <section class="content-card tab-content" id="tab-password" style="display: none;">
+                        <div class="card-header">
+                            <div>
+                                <h3>Đổi mật khẩu</h3>
+                                <p>Đảm bảo tài khoản của bạn đang sử dụng một mật khẩu mạnh và an toàn.</p>
+                            </div>
+                        </div>
+
+                        <form id="changePasswordForm" class="profile-form">
+                            <div class="form-grid" style="grid-template-columns: 1fr;">
+                                <div class="input-group">
+                                    <label>Mật khẩu hiện tại</label>
+                                    <div class="password-input-wrap">
+                                        <input type="password" id="oldPassword" placeholder="Nhập mật khẩu hiện tại" required minlength="6">
+                                        <i class="fas fa-eye-slash toggle-password" data-target="oldPassword" style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label>Mật khẩu mới</label>
+                                    <div class="password-input-wrap">
+                                        <input type="password" id="newPassword" placeholder="Nhập mật khẩu mới" required minlength="6">
+                                        <i class="fas fa-eye-slash toggle-password" data-target="newPassword" style="cursor: pointer;"></i>
+                                    </div>
+                                    <div class="password-hint" style="margin-top: 8px; font-size: 0.85rem; color: #64748b;">
+                                        Gợi ý: Mật khẩu nên dài ít nhất 6 ký tự, kết hợp chữ hoa, chữ thường, số và ký tự đặc biệt để đảm bảo an toàn.
+                                    </div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label>Xác nhận mật khẩu mới</label>
+                                    <div class="password-input-wrap">
+                                        <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu mới" required minlength="6">
+                                        <i class="fas fa-eye-slash toggle-password" data-target="confirmPassword" style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-form-actions">
+                                <button type="submit" id="btnChangePassword" class="btn-save-profile">
+                                    Cập nhật mật khẩu
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- UC10: Theo dõi hạng thành viên và điểm tích lũy -->
+                    <section class="content-card tab-content" id="tab-membership" style="display: none;">
                         <div class="card-header">
                             <div>
                                 <h3>Hạng thành viên</h3>
@@ -120,15 +208,15 @@
 
                         <div class="membership-grid">
                             <div class="membership-item highlight">
-                                <span>Hạng hiện tại</span>
+                                <span><i class="fas fa-crown"></i> Hạng hiện tại</span>
                                 <strong id="membershipTier">Bronze</strong>
                             </div>
                             <div class="membership-item">
-                                <span>Điểm hiện tại</span>
+                                <span><i class="fas fa-star"></i> Điểm hiện tại</span>
                                 <strong id="membershipPoint">0</strong>
                             </div>
                             <div class="membership-item">
-                                <span>Ưu đãi giảm giá</span>
+                                <span><i class="fas fa-percent"></i> Ưu đãi giảm giá</span>
                                 <strong id="membershipDiscount">0%</strong>
                             </div>
                         </div>
@@ -137,10 +225,53 @@
                             <h4>Quyền lợi đang áp dụng</h4>
                             <p id="membershipBenefitsText">Đang tải quyền lợi thành viên...</p>
                         </div>
+
+                        <!-- Bảng phân hạng theo doc (Bảng 03) -->
+                        <div class="tier-table-panel">
+                            <h4>Bảng phân hạng thành viên</h4>
+                            <div class="tier-table-scroll">
+                                <table class="tier-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Hạng</th>
+                                            <th>Điểm tích lũy</th>
+                                            <th>Tổng chi tiêu</th>
+                                            <th>Mức giảm</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-tier="bronze">
+                                            <td><span class="tier-pill tier-pill-bronze">Bronze</span></td>
+                                            <td>0 – dưới 800</td>
+                                            <td>0 – dưới 80 triệu</td>
+                                            <td>0%</td>
+                                        </tr>
+                                        <tr data-tier="silver">
+                                            <td><span class="tier-pill tier-pill-silver">Silver</span></td>
+                                            <td>800 – dưới 2.500</td>
+                                            <td>80 – dưới 250 triệu</td>
+                                            <td>5%</td>
+                                        </tr>
+                                        <tr data-tier="gold">
+                                            <td><span class="tier-pill tier-pill-gold">Gold</span></td>
+                                            <td>2.500 – dưới 6.000</td>
+                                            <td>250 – dưới 600 triệu</td>
+                                            <td>10%</td>
+                                        </tr>
+                                        <tr data-tier="platinum">
+                                            <td><span class="tier-pill tier-pill-platinum">Platinum</span></td>
+                                            <td>Trên 6.000</td>
+                                            <td>Trên 600 triệu</td>
+                                            <td>15%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </section>
 
-                    <!-- Booking History -->
-                    <section class="content-card">
+                    <!-- UC08: Xem lịch sử đặt phòng -->
+                    <section class="content-card tab-content" id="tab-history" style="display: none;">
                         <div class="card-header">
                             <div>
                                 <h3>Lịch sử đặt phòng</h3>
@@ -152,35 +283,131 @@
                             <div class="empty-booking">Đang tải lịch sử đặt phòng...</div>
                         </div>
                     </section>
+
+                    <!-- Đánh giá của tôi -->
+                    <section class="content-card tab-content" id="tab-myreviews" style="display: none;">
+                        <div class="card-header">
+                            <div>
+                                <h3>Đánh giá của tôi</h3>
+                                <p>Quản lý các đánh giá bạn đã gửi cho Mây Vàng, có thể sửa hoặc xóa.</p>
+                            </div>
+                        </div>
+
+                        <div id="myReviewsList" class="my-reviews-list">
+                            <div class="empty-booking">Đang tải đánh giá...</div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </section>
     </main>
 
-    <script src="js/notifications.js"></script>
-    <script src="js/Header.js"></script>
-    <script src="js/Profile.js"></script>
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container" style="max-width: 800px; width: 95%;">
+            <div class="modal-header">
+                <h3 id="reviewModalTitle">Đánh giá Mây Vàng</h3>
+                <button type="button" class="btn-close-modal" id="btnCloseReviewModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reviewForm" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <input type="hidden" id="reviewBookingId" name="bookingId">
+                    <input type="hidden" id="reviewEditId" value="">
+                    <input type="hidden" id="reviewExistingImages" value="">
+                    
+                    <!-- Left Column -->
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div class="form-group rating-group" style="text-align: center; margin-bottom: 0;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 700; font-size: 1.1rem; color: #1e293b;">Chất lượng tổng thể</label>
+                            <div class="star-rating main-rating" style="font-size: 2.5rem; color: #e2e8f0; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; gap: 8px;">
+                                <i class="fas fa-star" data-rating="1"></i>
+                                <i class="fas fa-star" data-rating="2"></i>
+                                <i class="fas fa-star" data-rating="3"></i>
+                                <i class="fas fa-star" data-rating="4"></i>
+                                <i class="fas fa-star" data-rating="5"></i>
+                            </div>
+                            <input type="hidden" id="reviewRating" name="rating" value="0" required>
+                        </div>
+                        
+                        <div class="sub-ratings" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; flex-grow: 1;">
+                            <div class="sub-rating-item" style="display: flex; flex-direction: column; gap: 4px;">
+                                <label style="margin: 0; font-weight: 600; color: #475569; font-size: 0.9rem;"><i class="fas fa-broom" style="width: 16px; color: #64748b;"></i> Sạch sẽ</label>
+                                <div class="star-rating sub" data-target="cleanlinessRating" style="font-size: 1.2rem; color: #fbbf24; cursor: pointer; display: flex; gap: 3px;">
+                                    <i class="fas fa-star" data-rating="1"></i><i class="fas fa-star" data-rating="2"></i><i class="fas fa-star" data-rating="3"></i><i class="fas fa-star" data-rating="4"></i><i class="fas fa-star" data-rating="5"></i>
+                                </div>
+                                <input type="hidden" id="cleanlinessRating" name="cleanlinessRating" value="5">
+                            </div>
+                            <div class="sub-rating-item" style="display: flex; flex-direction: column; gap: 4px;">
+                                <label style="margin: 0; font-weight: 600; color: #475569; font-size: 0.9rem;"><i class="fas fa-concierge-bell" style="width: 16px; color: #64748b;"></i> Dịch vụ</label>
+                                <div class="star-rating sub" data-target="serviceRating" style="font-size: 1.2rem; color: #fbbf24; cursor: pointer; display: flex; gap: 3px;">
+                                    <i class="fas fa-star" data-rating="1"></i><i class="fas fa-star" data-rating="2"></i><i class="fas fa-star" data-rating="3"></i><i class="fas fa-star" data-rating="4"></i><i class="fas fa-star" data-rating="5"></i>
+                                </div>
+                                <input type="hidden" id="serviceRating" name="serviceRating" value="5">
+                            </div>
+                            <div class="sub-rating-item" style="display: flex; flex-direction: column; gap: 4px;">
+                                <label style="margin: 0; font-weight: 600; color: #475569; font-size: 0.9rem;"><i class="fas fa-tv" style="width: 16px; color: #64748b;"></i> Tiện nghi</label>
+                                <div class="star-rating sub" data-target="facilitiesRating" style="font-size: 1.2rem; color: #fbbf24; cursor: pointer; display: flex; gap: 3px;">
+                                    <i class="fas fa-star" data-rating="1"></i><i class="fas fa-star" data-rating="2"></i><i class="fas fa-star" data-rating="3"></i><i class="fas fa-star" data-rating="4"></i><i class="fas fa-star" data-rating="5"></i>
+                                </div>
+                                <input type="hidden" id="facilitiesRating" name="facilitiesRating" value="5">
+                            </div>
+                            <div class="sub-rating-item" style="display: flex; flex-direction: column; gap: 4px;">
+                                <label style="margin: 0; font-weight: 600; color: #475569; font-size: 0.9rem;"><i class="fas fa-map-marker-alt" style="width: 16px; color: #64748b;"></i> Vị trí</label>
+                                <div class="star-rating sub" data-target="locationRating" style="font-size: 1.2rem; color: #fbbf24; cursor: pointer; display: flex; gap: 3px;">
+                                    <i class="fas fa-star" data-rating="1"></i><i class="fas fa-star" data-rating="2"></i><i class="fas fa-star" data-rating="3"></i><i class="fas fa-star" data-rating="4"></i><i class="fas fa-star" data-rating="5"></i>
+                                </div>
+                                <input type="hidden" id="locationRating" name="locationRating" value="5">
+                            </div>
+                        </div>
+
+                        <label class="anonymous-toggle" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(145deg, #fffbeb, #fef3c7); padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 1px solid #fde68a;">
+                            <input type="checkbox" id="reviewAnonymous" name="isAnonymous" style="width: 18px; height: 18px; accent-color: #d97706; cursor: pointer;">
+                            <div>
+                                <div style="font-weight: 700; color: #92400e; margin-bottom: 2px; font-size: 0.9rem;">Đánh giá ẩn danh</div>
+                                <div style="font-size: 0.75rem; color: #b45309;">Tên và avatar của bạn sẽ được giấu kín.</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div class="input-group">
+                            <label for="reviewComment" style="font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Trải nghiệm của bạn</label>
+                            <textarea id="reviewComment" name="comment" rows="4" placeholder="Chia sẻ cảm nhận của bạn về phòng ốc, thái độ phục vụ..." required style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: inherit; resize: vertical; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); transition: all 0.3s;" onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='inset 0 2px 4px rgba(0,0,0,0.02)'"></textarea>
+                        </div>
+
+                        <div class="input-group" style="flex-grow: 1; display: flex; flex-direction: column;">
+                            <label style="font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;"><i class="fas fa-camera"></i> Hình ảnh thực tế <span style="font-weight: 400; color: #64748b; font-size: 0.85rem;">(Tối đa 5 ảnh)</span></label>
+                            <div style="position: relative; flex-grow: 1; min-height: 100px;">
+                                <input type="file" id="reviewImages" name="images" accept="image/*" multiple style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2;">
+                                <div style="width: 100%; height: 100%; padding: 12px; background: #f8fafc; border-radius: 8px; border: 2px dashed #94a3b8; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; transition: all 0.3s;">
+                                    <i class="fas fa-cloud-upload-alt" style="font-size: 1.5rem; margin-bottom: 5px; color: #94a3b8;"></i>
+                                    <p style="margin: 0; font-weight: 500; font-size: 0.9rem;">Nhấn hoặc kéo thả ảnh</p>
+                                </div>
+                            </div>
+                            <div id="reviewImagesPreview" style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;"></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions" style="grid-column: 1 / -1; margin-top: 10px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #f1f5f9; padding-top: 15px;">
+                        <button type="button" class="btn-cancel" id="btnCancelReview" style="padding: 10px 20px; border: none; border-radius: 99px; font-weight: 600; cursor: pointer; background: #e2e8f0; color: #475569; transition: 0.2s;" onmouseover="this.style.background='#cbd5e1'" onmouseout="this.style.background='#e2e8f0'">Hủy bỏ</button>
+                        <button type="submit" class="btn-submit-review" style="padding: 10px 20px; border: none; border-radius: 99px; font-weight: 600; cursor: pointer; background: linear-gradient(135deg, #ef4136, #c73b0c); color: white; box-shadow: 0 4px 14px rgba(239, 65, 54, 0.3); transition: 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Gửi đánh giá</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/notifications.js?v=3"></script>
+    <script src="js/Header.js?v=3"></script>
+    <script src="js/Profile.js?v=3"></script>
 
     <script>
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-
-                if (typeof initHeader === 'function') initHeader();
-                if (typeof initAuth === 'function') initAuth();
-
-                // Chỉ khởi tạo ProfileService sau khi header đã inject xong
-                if (typeof ProfileService === 'function') {
-                    new ProfileService();
-                }
-            })
-            .catch(err => {
-                console.error("Lỗi tải header:", err);
-                if (typeof ProfileService === 'function') {
-                    new ProfileService();
-                }
-            });
+        if (typeof ProfileService === 'function') {
+            if (typeof profileService === 'undefined' || !profileService) {
+                profileService = new ProfileService();
+            }
+        }
     </script>
 </body>
 

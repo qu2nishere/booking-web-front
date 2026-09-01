@@ -347,7 +347,7 @@ body {
 
 /* Table */
 .table-responsive {
-    overflow-x: auto;
+    overflow: visible;
 }
 .data-table {
     width: 100%;
@@ -647,4 +647,166 @@ body {
     .modern-select {
         width: 100%;
     }
+}
+
+/* ===== Dropdown đẹp hơn: modal sửa phòng + bộ lọc booking ===== */
+.form-group select,
+.status-filter {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a06a2c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 42px;
+    cursor: pointer;
+    transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+.form-group select:hover,
+.status-filter:hover {
+    border-color: #f0a868;
+}
+
+.form-group select:focus,
+.status-filter:focus {
+    border-color: #c53030;
+    box-shadow: 0 0 0 3px rgba(197, 48, 48, 0.15);
+    outline: none;
+}
+
+/* Tô màu nhẹ cho danh sách xổ xuống (hỗ trợ trên Chrome/Edge) */
+.form-group select option,
+.status-filter option,
+.modern-select option {
+    background: #fff;
+    color: #4a3f35;
+    padding: 10px;
+}
+
+/* Ô ngày flatpickr trong trang admin cho đồng bộ với input khác */
+.flatpickr-alt.modern-input {
+    cursor: pointer;
+    background-color: #fff;
+}
+
+/* Hàng ngang gọn: khoảng ngày bảo trì + lý do trong modal sửa phòng */
+.maintenance-info {
+    color: #94a3b8;
+    cursor: help;
+    margin-left: 4px;
+    font-size: 12px;
+}
+
+.maintenance-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.maintenance-row .modern-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.status-note-input {
+    width: 100%;
+    text-align: left;
+    cursor: text;
+}
+
+@media (max-width: 480px) {
+    .maintenance-row {
+        flex-wrap: wrap;
+    }
+    .maintenance-row .modern-input {
+        flex: 1 1 100%;
+    }
+}
+
+/* ===== Custom dropdown đẹp cho admin (filter + modal), xổ ra có style riêng ===== */
+.select-wrapper.adm-no-arrow::after { display: none; }
+
+.adm-select {
+    position: relative;
+    width: 100%;
+    min-width: 180px;
+    font-family: inherit;
+}
+
+.adm-select-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 16px;
+    background: #fff;
+    border: 1px solid #e2cfbc;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #4a3f35;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+.adm-select-trigger:hover { border-color: #f0a868; }
+.adm-select.open .adm-select-trigger {
+    border-color: #c53030;
+    box-shadow: 0 0 0 3px rgba(197, 48, 48, 0.15);
+}
+
+.adm-select-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.adm-select-chevron {
+    font-size: 12px;
+    color: #a06a2c;
+    flex-shrink: 0;
+    transition: transform .2s ease;
+}
+.adm-select.open .adm-select-chevron { transform: rotate(180deg); }
+
+.adm-select-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #efe6d4;
+    border-radius: 14px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+    z-index: 1200;
+    max-height: 280px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+}
+.adm-select.open .adm-select-menu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.adm-select-opt {
+    padding: 10px 14px;
+    border-radius: 9px;
+    font-size: 14px;
+    color: #4a3f35;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+}
+.adm-select-opt:hover { background: #fff4e6; }
+.adm-select-opt.selected {
+    background: linear-gradient(135deg, #FF8C00, #D4A017);
+    color: #fff;
+    font-weight: 600;
 }

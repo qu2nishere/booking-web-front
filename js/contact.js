@@ -68,20 +68,7 @@ function renderTeamMembers() {
     });
 }
 
-// Cập nhật các link tài nguyên (có thể thay đổi link thật ở đây)
-function setResourceLinks() {
-    const reportLink = document.getElementById('report-link');
-    const frontendLink = document.getElementById('github-frontend-link');
-    const backendLink = document.getElementById('github-backend-link');
-
-    // Thay thế các link dưới đây bằng link thực tế của dự án
-    if (reportLink) reportLink.href = "https://drive.google.com/file/d/1frUJwEACV2-hDCAr3PH6sapHUiYX3MrO/view?usp=sharing";
-    if (frontendLink) frontendLink.href = "https://github.com/Khoa18062005/Project_CuoiKy_OOSE_Frontend_FIT_HCMUTE";
-    if (backendLink) backendLink.href = "https://github.com/Khoa18062005/Project_CuoiKy_OOSE_FIT_HCMUTE";
-}
-
 // Khởi tạo trang
 document.addEventListener('DOMContentLoaded', () => {
     renderTeamMembers();
-    setResourceLinks();
 });

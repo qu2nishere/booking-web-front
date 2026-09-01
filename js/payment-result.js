@@ -14,7 +14,7 @@ class PaymentResultPage {
         if (!this.token) return;
 
         try {
-            const response = await fetch("http://localhost:8080/api/users/me", {
+            const response = await fetch("https://mayvang-api.onrender.com/api/users/me", {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${this.token}`,
@@ -34,9 +34,9 @@ class PaymentResultPage {
 
             if (headerName) headerName.innerText = profile.username || "User";
             if (headerAvatar) {
-                headerAvatar.src = profile.avatar && profile.avatar.trim() !== ""
-                    ? profile.avatar
-                    : "asset/default-avatar.png";
+                headerAvatar.src = profile.avatar && profile.avatar.trim() !== "" ?
+                    profile.avatar :
+                    "asset/default-avatar.png";
             }
         } catch (error) {
             console.warn("Không thể refresh profile sau thanh toán:", error);
@@ -138,7 +138,7 @@ class PaymentResultPage {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/payments/vnpay/${bookingId}`, {
+            const response = await fetch(`https://mayvang-api.onrender.com/api/payments/vnpay/${bookingId}`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${this.token}`
@@ -198,7 +198,7 @@ class PaymentResultPage {
     }
 
     safeNotify(message, type) {
-        if (typeof notify !== "undefined" && notify?.show) {
+        if (typeof notify !== "undefined" && notify ?.show) {
             setTimeout(() => notify.show(message, type), 250);
         }
     }

@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Quản trị khách sạn | Admin Dashboard</title>
-    <link rel="stylesheet" href="css/admin.css">
+    <title>Mây Vàng | Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin.css?v=7">
     <!-- Font Awesome 6 (Free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Flatpickr (lịch đẹp giống bên client) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- Chart.js cho biểu đồ -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -49,7 +51,7 @@
         <aside class="admin-sidebar">
             <div class="sidebar-header">
                 <i class="fas fa-hotel"></i>
-                <h3>Hotel<span>Manager</span></h3>
+                <h3>Mây<span>Vàng</span></h3>
             </div>
             <nav class="sidebar-nav">
                 <a href="#" class="nav-item active" data-tab="revenue">
@@ -67,6 +69,14 @@
                 <a href="#" class="nav-item" data-tab="booking-list">
                     <i class="fas fa-calendar-check"></i>
                     <span>DS booking khách hàng</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="review-management">
+                    <i class="fas fa-star"></i>
+                    <span>Quản lý đánh giá</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="manager-account">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Tài khoản quản lý</span>
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -150,9 +160,10 @@
                                     <th>Số điện thoại</th>
                                     <th>Số lần đặt</th>
                                     <th>Tổng chi tiêu</th>
+                                    <th>Lần đặt gần nhất</th>
                                     <th>Hạng thành viên</th>
-                                    <th>Điểm tích lũy</th>
-                                    <!-- <th>Đánh giá tiềm năng</th> -->
+                                    <th>Điểm RFM</th>
+                                    <th>Phân loại</th>
                                 </tr>
                             </thead>
                             <tbody id="potentialTableBody">
@@ -207,6 +218,10 @@
                             <span>Bảo trì:</span>
                             <strong id="maintenanceRooms">0</strong>
                         </div>
+                        <div class="mini-stat">
+                            <span>Ngừng kinh doanh:</span>
+                            <strong id="inactiveRooms">0</strong>
+                        </div>
                     </div>
                     <div class="rooms-grid" id="roomsGrid">
                         <!-- danh sách phòng động -->
@@ -244,7 +259,6 @@
                                     <!-- <th>Số đêm</th> -->
                                     <th>Tổng tiền</th>
                                     <th>Trạng thái</th>
-                                    <th>Chi tiết</th>
                                 </tr>
                             </thead>
                             <tbody id="bookingTableBody">
@@ -252,6 +266,62 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Tab Quản lý Đánh giá -->
+            <div id="review-management-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-star"></i> Quản lý Đánh giá Khách hàng</h2>
+                        <button id="refreshReviewsBtn" class="btn-small"><i class="fas fa-sync-alt"></i> Làm mới</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Khách hàng</th>
+                                    <th>Booking ID</th>
+                                    <th>Số sao</th>
+                                    <th>Bình luận</th>
+                                    <th>Ngày đánh giá</th>
+                                    <th>Phản hồi của Admin</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reviewsTableBody">
+                                <!-- JS render -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Tài khoản quản lý: tạo manager mới -->
+            <div id="manager-account-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-user-shield"></i> Tạo tài khoản quản lý</h2>
+                    </div>
+                    <form id="createManagerForm" style="max-width:480px; display:flex; flex-direction:column; gap:16px; padding:8px 4px;">
+                        <div class="form-group">
+                            <label>Tên đăng nhập</label>
+                            <input type="text" id="mgrUsername" required placeholder="VD: quanly02">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="mgrEmail" required placeholder="quanly02@mayvang.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu</label>
+                            <input type="password" id="mgrPassword" required minlength="8" placeholder="Ít nhất 8 ký tự">
+                        </div>
+                        <small id="mgrFormMsg" style="min-height:18px; color:#ef4444;"></small>
+                        <button type="submit" class="btn-small" style="align-self:flex-start;">
+                            <i class="fas fa-plus"></i> Tạo quản lý
+                        </button>
+                    </form>
                 </div>
             </div>
         </main>
@@ -271,12 +341,7 @@
                 <div class="form-group">
                     <label>Loại phòng:</label>
                     <select id="roomType">
-                        <option value="Basic">Basic</option>
-                        <option value="Superior">Superior</option>
-                        <option value="Deluxe">Deluxe</option>
-                        <option value="Royal">Royal</option>
-                        <option value="Junior Suite">Junior Suite</option>
-                        <option value="Family Suite">Family Suite</option>
+                        <!-- Đổ động từ /api/room-types -->
                     </select>
                 </div>
                 <div class="form-group">
@@ -290,13 +355,26 @@
                 <div class="form-group">
                     <label>Trạng thái vật lý của phòng:</label>
                     <select id="roomStatus">
-                        <option value="available">🟢 Hoạt động bình thường (Available)</option>
-                        <option value="maintenance">🟡 Đang bảo trì (Maintenance)</option>
-                        <option value="inactive">⚫ Ngừng kinh doanh (Inactive)</option>
+                        <option value="available">Hoạt động (Available)</option>
+                        <option value="maintenance">Bảo trì (Maintenance)</option>
+                        <option value="inactive">Ngừng kinh doanh (Inactive)</option>
                     </select>
                     <small style="color: #666; display: block; margin-top: 4px;">* Trạng thái "Đã đặt" sẽ tự động hiển
                         thị dựa vào lịch booking của khách hàng.</small>
                 </div>
+
+                <!-- Khoảng ngày & lý do bảo trì / ngừng hoạt động (chỉ hiện khi chọn maintenance/inactive) -->
+                <div class="form-group" id="maintenanceDateGroup" style="display: none;">
+                    <label>Bảo trì / ngừng hoạt động
+                        <i class="fas fa-circle-info maintenance-info" title='Để trống ngày = áp dụng tới khi gỡ thủ công. Có "Đến ngày" thì hệ thống tự kích hoạt lại phòng sau ngày đó.'></i>
+                    </label>
+                    <div class="maintenance-row">
+                        <input type="text" id="maintenanceStart" class="modern-input" placeholder="Từ ngày">
+                        <input type="text" id="maintenanceEnd" class="modern-input" placeholder="Đến ngày">
+                    </div>
+                    <input type="text" id="statusNote" class="modern-input status-note-input" placeholder="Lý do (VD: Sửa điều hòa, thay thảm sàn...)">
+                </div>
+
                 <div class="modal-buttons">
                     <button type="submit" class="btn-save"><i class="fas fa-save"></i> Lưu thay đổi</button>
                     <button type="button" id="deleteRoomBtn" class="btn-delete"><i class="fas fa-trash"></i> Xóa
@@ -315,7 +393,119 @@
         </div>
     </div>
 
-    <script src="js/admin.js"></script>
+    <!-- Modal Phản hồi đánh giá -->
+    <div id="replyReviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 style="display:flex; align-items:center; gap:10px;"><i class="fas fa-reply" style="color:#f15a24;"></i> Phản hồi đánh giá</h3>
+            <p style="color:#64748b; font-size:0.9rem; margin:-6px 0 18px;">Phản hồi sẽ hiển thị công khai ngay dưới đánh giá của khách.</p>
+            <form id="replyReviewForm">
+                <input type="hidden" id="replyReviewId">
+                <div class="form-group" style="margin-bottom: 18px;">
+                    <label style="display:flex; align-items:center; gap:6px; color:#475569; font-weight:600; margin-bottom:8px;"><i class="fas fa-quote-left" style="color:#94a3b8;"></i> Bình luận của khách</label>
+                    <p id="replyCustomerComment" style="background:#f8fafc; border:1px solid #e2e8f0; border-left:3px solid #cbd5e1; padding:12px 16px; border-radius:10px; font-style:italic; color:#475569; margin:0;"></p>
+                </div>
+                <div class="form-group">
+                    <label style="display:flex; align-items:center; gap:6px; color:#475569; font-weight:600; margin-bottom:8px;"><i class="fas fa-pen" style="color:#f15a24;"></i> Nội dung phản hồi</label>
+                    <textarea id="adminReplyText" rows="4" required placeholder="Nhập phản hồi của Mây Vàng dành cho khách..."
+                        style="width:100%; padding:12px 14px; border:1px solid #cbd5e1; border-radius:12px; font-family:inherit; font-size:0.95rem; resize:vertical; outline:none; transition:border-color .2s, box-shadow .2s;"
+                        onfocus="this.style.borderColor='#f15a24'; this.style.boxShadow='0 0 0 3px rgba(241,90,36,0.12)';"
+                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';"></textarea>
+                </div>
+                <div class="modal-buttons" style="margin-top: 22px;">
+                    <button type="submit" class="btn-save"><i class="fas fa-paper-plane"></i> Gửi phản hồi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận đăng xuất (thay thế confirm() xấu mặc định) -->
+    <div id="logoutConfirmModal" style="
+        display: none;
+        position: fixed; inset: 0;
+        z-index: 99999;
+        background: rgba(0,0,0,0.45);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        align-items: center; justify-content: center;
+        animation: admFadeIn 0.25s ease;
+    ">
+        <div style="
+            background: #fff;
+            border-radius: 18px;
+            padding: 36px 32px 28px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1);
+            text-align: center;
+            animation: admSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        ">
+            <!-- Icon -->
+            <div style="
+                width: 68px; height: 68px;
+                margin: 0 auto 20px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #fff5f5, #fee2e2);
+                display: flex; align-items: center; justify-content: center;
+                box-shadow: 0 4px 15px rgba(239,68,68,0.15);
+            ">
+                <i class="fas fa-sign-out-alt" style="font-size: 28px; color: #ef4444;"></i>
+            </div>
+            <!-- Text -->
+            <h3 style="margin: 0 0 8px; font-size: 1.3rem; color: #1e293b; font-weight: 700;">Đăng xuất?</h3>
+            <p style="margin: 0 0 28px; color: #64748b; font-size: 0.95rem; line-height: 1.6;">
+                Bạn có chắc chắn muốn đăng xuất khỏi<br>trang quản trị không?
+            </p>
+            <!-- Buttons -->
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button id="logoutCancelBtn" style="
+                    flex: 1; padding: 12px 20px;
+                    border: 1.5px solid #e2e8f0;
+                    background: #fff;
+                    color: #475569;
+                    border-radius: 12px;
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                " onmouseover="this.style.background='#f8fafc'; this.style.borderColor='#cbd5e1';"
+                   onmouseout="this.style.background='#fff'; this.style.borderColor='#e2e8f0';">
+                    Hủy bỏ
+                </button>
+                <button id="logoutConfirmBtn" style="
+                    flex: 1; padding: 12px 20px;
+                    border: none;
+                    background: linear-gradient(135deg, #ef4444, #dc2626);
+                    color: #fff;
+                    border-radius: 12px;
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 4px 14px rgba(239,68,68,0.35);
+                " onmouseover="this.style.boxShadow='0 6px 20px rgba(239,68,68,0.5)'; this.style.transform='translateY(-1px)';"
+                   onmouseout="this.style.boxShadow='0 4px 14px rgba(239,68,68,0.35)'; this.style.transform='translateY(0)';">
+                    <i class="fas fa-sign-out-alt" style="margin-right: 6px;"></i>Đăng xuất
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes admFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes admSlideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+
+    <!-- Flatpickr cho ô chọn ngày -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
+    <script src="js/admin.js?v=7"></script>
 </body>
 
 </html>

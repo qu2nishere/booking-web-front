@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Đăng nhập - Khách sạn phong cách</title>
+    <title>Đăng nhập - Khách sạn Mây Vàng</title>
     <link rel="stylesheet" href="css/Login.css">
     <link rel="stylesheet" href="css/Background.css">
     <link rel="stylesheet" href="css/Global.css">
@@ -31,7 +31,10 @@
                     </div>
                     <div class="input-group">
                         <label>Mật khẩu</label>
-                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        <div class="password-input-wrap">
+                            <input type="password" id="loginPassword" placeholder="••••••••" required>
+                            <i class="fas fa-eye-slash toggle-password" data-target="loginPassword" style="cursor: pointer;"></i>
+                        </div>
                         <small class="error-msg" id="error-password"></small>
                     </div>
 
@@ -51,6 +54,10 @@
                         </button>
                     </div>
 
+                    <div class="auth-divider"><span>hoặc</span></div>
+
+                    <div id="googleBtn" class="google-btn-container"></div>
+
                     <div class="register-redirect">
                         Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a>
                     </div>
@@ -60,7 +67,7 @@
             <!-- Cột phải: Hình khách sạn -->
             <div class="image-section">
                 <div class="hotel-img-frame">
-                    <img src="asset/Hotel.png" alt="Khách sạn phong cách" loading="lazy">
+                    <img src="asset/Hotel.png" alt="Khách sạn Mây Vàng" loading="lazy">
                 </div>
                 <div class="slogan">Chọn chúng tôi, chọn phong cách!</div>
             </div>
@@ -68,6 +75,8 @@
     </div>
 
     <script src="js/notifications.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="js/GoogleAuth.js"></script>
     <script src="js/Login.js"></script>
 </body>
 </html>
